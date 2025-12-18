@@ -2,9 +2,8 @@ package app;
 
 import model.store.DataStore;
 import persistence.FileLoader;
-import view.PatientPanel;
+import view.MainFrame;
 
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class Main {
@@ -15,13 +14,7 @@ public class Main {
         FileLoader.loadPatients("data/patients.csv", store);
 
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Healthcare Management System");
-            frame.setSize(900, 500);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            frame.setContentPane(new PatientPanel(store));
-
-            frame.setLocationRelativeTo(null);
+            MainFrame frame = new MainFrame(store);
             frame.setVisible(true);
         });
     }
