@@ -1,7 +1,16 @@
 package app;
 
+import model.store.DataStore;
+import persistence.FileLoader;
+
 public class Main {
+
     public static void main(String[] args) {
-        System.out.println("Healthcare system started");
+
+        DataStore store = new DataStore();
+
+        FileLoader.loadPatients("data/patients.csv", store);
+
+        System.out.println("Patients loaded: " + store.getPatients().size());
     }
 }
