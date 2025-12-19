@@ -4,6 +4,7 @@ import model.Appointment;
 import model.Clinician;
 import model.Patient;
 import model.Prescription;
+import model.Referral;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class DataStore {
     private Map<String, Clinician> clinicians = new LinkedHashMap<>();
     private Map<String, Appointment> appointments = new LinkedHashMap<>();
     private Map<String, Prescription> prescriptions = new LinkedHashMap<>();
+    private Map<String, Referral> referrals = new LinkedHashMap<>();
 
     // Patients
     public Map<String, Patient> getPatients() {
@@ -56,6 +58,17 @@ public class DataStore {
     public void addPrescription(Prescription p) {
         if (p != null) {
             prescriptions.put(p.getPrescriptionId(), p);
+        }
+    }
+
+    // Referrals
+    public Map<String, Referral> getReferrals() {
+        return referrals;
+    }
+
+    public void addReferral(Referral r) {
+        if (r != null) {
+            referrals.put(r.getReferralId(), r);
         }
     }
 }
