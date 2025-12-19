@@ -1,16 +1,15 @@
 package model.store;
 
 import model.Patient;
+import model.Clinician;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/*
- * Holds application data in memory (no database in this assignment).
- */
 public class DataStore {
 
     private Map<String, Patient> patients = new LinkedHashMap<>();
+    private Map<String, Clinician> clinicians = new LinkedHashMap<>();
 
     public Map<String, Patient> getPatients() {
         return patients;
@@ -27,5 +26,22 @@ public class DataStore {
 
     public void removePatient(String id) {
         patients.remove(id);
+    }
+
+    public Map<String, Clinician> getClinicians() {
+        return clinicians;
+    }
+
+    public void addClinician(Clinician c) {
+        if (c == null) return;
+        clinicians.put(c.getClinicianId(), c);
+    }
+
+    public Clinician getClinicianById(String id) {
+        return clinicians.get(id);
+    }
+
+    public void removeClinician(String id) {
+        clinicians.remove(id);
     }
 }
