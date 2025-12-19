@@ -4,6 +4,7 @@ import model.Appointment;
 import model.Clinician;
 import model.Patient;
 import model.Prescription;
+import model.Referral;
 import model.store.DataStore;
 
 import java.io.BufferedReader;
@@ -18,24 +19,18 @@ public class FileLoader {
             String line = reader.readLine(); // skip header
 
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", -1);
+                String[] p = line.split(",", -1);
 
                 Patient patient = new Patient(
-                        parts[0],
-                        parts[1],
-                        parts[2],
-                        parts[3],
-                        parts[4],
-                        parts[5],
-                        parts[6],
-                        parts[7]
+                        p[0], p[1], p[2], p[3],
+                        p[4], p[5], p[6], p[7]
                 );
 
                 store.addPatient(patient);
             }
 
         } catch (IOException e) {
-            System.out.println("Error loading patients file");
+            System.out.println("Error loading patients");
             e.printStackTrace();
         }
     }
@@ -43,26 +38,21 @@ public class FileLoader {
     public static void loadClinicians(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
-            String line = reader.readLine(); // skip header
+            String line = reader.readLine();
 
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", -1);
+                String[] c = line.split(",", -1);
 
                 Clinician clinician = new Clinician(
-                        parts[0],
-                        parts[1],
-                        parts[2],
-                        parts[3],
-                        parts[4],
-                        parts[5],
-                        parts[6]
+                        c[0], c[1], c[2], c[3],
+                        c[4], c[5], c[6]
                 );
 
                 store.addClinician(clinician);
             }
 
         } catch (IOException e) {
-            System.out.println("Error loading clinicians file");
+            System.out.println("Error loading clinicians");
             e.printStackTrace();
         }
     }
@@ -70,27 +60,21 @@ public class FileLoader {
     public static void loadAppointments(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
-            String line = reader.readLine(); // skip header
+            String line = reader.readLine();
 
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", -1);
+                String[] a = line.split(",", -1);
 
                 Appointment appointment = new Appointment(
-                        parts[0],
-                        parts[1],
-                        parts[2],
-                        parts[3],
-                        parts[4],
-                        parts[5],
-                        parts[6],
-                        parts[7]
+                        a[0], a[1], a[2], a[3],
+                        a[4], a[5], a[6], a[7]
                 );
 
                 store.addAppointment(appointment);
             }
 
         } catch (IOException e) {
-            System.out.println("Error loading appointments file");
+            System.out.println("Error loading appointments");
             e.printStackTrace();
         }
     }
@@ -98,34 +82,47 @@ public class FileLoader {
     public static void loadPrescriptions(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
-            String line = reader.readLine(); // skip header
+            String line = reader.readLine();
 
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", -1);
+                String[] p = line.split(",", -1);
 
                 Prescription prescription = new Prescription(
-                        parts[0],
-                        parts[1],
-                        parts[2],
-                        parts[3],
-                        parts[4],
-                        parts[5],
-                        parts[6],
-                        parts[7],
-                        parts[8],
-                        parts[9],
-                        parts[10],
-                        parts[11],
-                        parts[12],
-                        parts[13],
-                        parts[14]
+                        p[0], p[1], p[2], p[3],
+                        p[4], p[5], p[6], p[7],
+                        p[8], p[9], p[10], p[11],
+                        p[12], p[13], p[14]
                 );
 
                 store.addPrescription(prescription);
             }
 
         } catch (IOException e) {
-            System.out.println("Error loading prescriptions file");
+            System.out.println("Error loading prescriptions");
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadReferrals(String filePath, DataStore store) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
+            String line = reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                String[] r = line.split(",", -1);
+
+                Referral referral = new Referral(
+                        r[0], r[1], r[2], r[3],
+                        r[4], r[5], r[6], r[7],
+                        r[8], r[9], r[10], r[11],
+                        r[12], r[13], r[14], r[15]
+                );
+
+                store.addReferral(referral);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error loading referrals");
             e.printStackTrace();
         }
     }
