@@ -1,8 +1,9 @@
 package model.store;
 
-import model.Patient;
-import model.Clinician;
 import model.Appointment;
+import model.Clinician;
+import model.Patient;
+import model.Prescription;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ public class DataStore {
     private Map<String, Patient> patients = new LinkedHashMap<>();
     private Map<String, Clinician> clinicians = new LinkedHashMap<>();
     private Map<String, Appointment> appointments = new LinkedHashMap<>();
+    private Map<String, Prescription> prescriptions = new LinkedHashMap<>();
 
     // Patients
     public Map<String, Patient> getPatients() {
@@ -43,6 +45,17 @@ public class DataStore {
     public void addAppointment(Appointment a) {
         if (a != null) {
             appointments.put(a.getAppointmentId(), a);
+        }
+    }
+
+    // Prescriptions
+    public Map<String, Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+
+    public void addPrescription(Prescription p) {
+        if (p != null) {
+            prescriptions.put(p.getPrescriptionId(), p);
         }
     }
 }
