@@ -17,6 +17,7 @@ public class MainFrame extends JFrame {
         tabs.addTab("Clinicians", new ClinicianPanel(store));
         tabs.addTab("Appointments", new AppointmentPanel(store));
         tabs.addTab("Prescriptions", new PrescriptionPanel(store));
+        tabs.addTab("Referrals", new ReferralPanel(store));
 
         setContentPane(tabs);
         setLocationRelativeTo(null);
