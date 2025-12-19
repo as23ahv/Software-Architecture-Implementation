@@ -1,8 +1,9 @@
 package persistence;
 
-import model.Patient;
-import model.Clinician;
 import model.Appointment;
+import model.Clinician;
+import model.Patient;
+import model.Prescription;
 import model.store.DataStore;
 
 import java.io.BufferedReader;
@@ -90,6 +91,41 @@ public class FileLoader {
 
         } catch (IOException e) {
             System.out.println("Error loading appointments file");
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadPrescriptions(String filePath, DataStore store) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
+            String line = reader.readLine(); // skip header
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",", -1);
+
+                Prescription prescription = new Prescription(
+                        parts[0],
+                        parts[1],
+                        parts[2],
+                        parts[3],
+                        parts[4],
+                        parts[5],
+                        parts[6],
+                        parts[7],
+                        parts[8],
+                        parts[9],
+                        parts[10],
+                        parts[11],
+                        parts[12],
+                        parts[13],
+                        parts[14]
+                );
+
+                store.addPrescription(prescription);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error loading prescriptions file");
             e.printStackTrace();
         }
     }
