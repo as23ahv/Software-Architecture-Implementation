@@ -1,7 +1,8 @@
 package persistence;
 
-import model.Clinician;
 import model.Patient;
+import model.Clinician;
+import model.Appointment;
 import model.store.DataStore;
 
 import java.io.BufferedReader;
@@ -13,7 +14,7 @@ public class FileLoader {
     public static void loadPatients(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
-            String line = reader.readLine(); // header
+            String line = reader.readLine(); // skip header
 
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",", -1);
@@ -41,13 +42,11 @@ public class FileLoader {
     public static void loadClinicians(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
-            String line = reader.readLine(); // header
+            String line = reader.readLine(); // skip header
 
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",", -1);
 
-                // assumes first 7 columns match this order:
-                // clinicianId, firstName, lastName, role, qualification, specialty, facilityId
                 Clinician clinician = new Clinician(
                         parts[0],
                         parts[1],
@@ -63,6 +62,34 @@ public class FileLoader {
 
         } catch (IOException e) {
             System.out.println("Error loading clinicians file");
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadAppointments(String filePath, DataStore store) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
+            String line = reader.readLine(); // skip header
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",", -1);
+
+                Appointment appointment = new Appointment(
+                        parts[0],
+                        parts[1],
+                        parts[2],
+                        parts[3],
+                        parts[4],
+                        parts[5],
+                        parts[6],
+                        parts[7]
+                );
+
+                store.addAppointment(appointment);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error loading appointments file");
             e.printStackTrace();
         }
     }
