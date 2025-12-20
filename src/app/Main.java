@@ -18,6 +18,7 @@ public class Main {
         FileLoader.loadPrescriptions("data/prescriptions.csv", store);
         FileLoader.loadReferrals("data/referrals.csv", store);
         FileLoader.loadStaff("data/staff.csv", store);
+        FileLoader.loadFacilities("data/facilities.csv", store);
 
         System.out.println("Patients loaded: " + store.getPatients().size());
         System.out.println("Clinicians loaded: " + store.getClinicians().size());
@@ -25,6 +26,7 @@ public class Main {
         System.out.println("Prescriptions loaded: " + store.getPrescriptions().size());
         System.out.println("Referrals loaded: " + store.getReferrals().size());
         System.out.println("Staff loaded: " + store.getStaff().size());
+        System.out.println("Facilities loaded: " + store.getFacilities().size());
 
         SwingUtilities.invokeLater(() -> {
             MainFrame frame = new MainFrame(store);
