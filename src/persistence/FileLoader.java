@@ -5,6 +5,7 @@ import model.Clinician;
 import model.Patient;
 import model.Prescription;
 import model.Referral;
+import model.Staff;
 import model.store.DataStore;
 
 import java.io.BufferedReader;
@@ -15,9 +16,7 @@ public class FileLoader {
 
     public static void loadPatients(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-
-            String line = reader.readLine(); // skip header
-
+            String line = reader.readLine(); // header
             while ((line = reader.readLine()) != null) {
                 String[] p = line.split(",", -1);
 
@@ -28,7 +27,6 @@ public class FileLoader {
 
                 store.addPatient(patient);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading patients");
             e.printStackTrace();
@@ -37,9 +35,7 @@ public class FileLoader {
 
     public static void loadClinicians(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-
-            String line = reader.readLine();
-
+            String line = reader.readLine(); // header
             while ((line = reader.readLine()) != null) {
                 String[] c = line.split(",", -1);
 
@@ -50,7 +46,6 @@ public class FileLoader {
 
                 store.addClinician(clinician);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading clinicians");
             e.printStackTrace();
@@ -59,9 +54,7 @@ public class FileLoader {
 
     public static void loadAppointments(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-
-            String line = reader.readLine();
-
+            String line = reader.readLine(); // header
             while ((line = reader.readLine()) != null) {
                 String[] a = line.split(",", -1);
 
@@ -72,7 +65,6 @@ public class FileLoader {
 
                 store.addAppointment(appointment);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading appointments");
             e.printStackTrace();
@@ -81,9 +73,7 @@ public class FileLoader {
 
     public static void loadPrescriptions(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-
-            String line = reader.readLine();
-
+            String line = reader.readLine(); // header
             while ((line = reader.readLine()) != null) {
                 String[] p = line.split(",", -1);
 
@@ -96,7 +86,6 @@ public class FileLoader {
 
                 store.addPrescription(prescription);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading prescriptions");
             e.printStackTrace();
@@ -105,9 +94,7 @@ public class FileLoader {
 
     public static void loadReferrals(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-
-            String line = reader.readLine();
-
+            String line = reader.readLine(); // header
             while ((line = reader.readLine()) != null) {
                 String[] r = line.split(",", -1);
 
@@ -120,9 +107,29 @@ public class FileLoader {
 
                 store.addReferral(referral);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading referrals");
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadStaff(String filePath, DataStore store) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line = reader.readLine(); // header
+            while ((line = reader.readLine()) != null) {
+                String[] s = line.split(",", -1);
+
+                // assumes first 8 columns:
+                // staffId, firstName, lastName, role, department, facilityId, phone, email
+                Staff staff = new Staff(
+                        s[0], s[1], s[2], s[3],
+                        s[4], s[5], s[6], s[7]
+                );
+
+                store.addStaff(staff);
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading staff");
             e.printStackTrace();
         }
     }
