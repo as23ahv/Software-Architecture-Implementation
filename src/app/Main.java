@@ -16,11 +16,15 @@ public class Main {
         FileLoader.loadClinicians("data/clinicians.csv", store);
         FileLoader.loadAppointments("data/appointments.csv", store);
         FileLoader.loadPrescriptions("data/prescriptions.csv", store);
+        FileLoader.loadReferrals("data/referrals.csv", store);
+        FileLoader.loadStaff("data/staff.csv", store);
 
         System.out.println("Patients loaded: " + store.getPatients().size());
         System.out.println("Clinicians loaded: " + store.getClinicians().size());
         System.out.println("Appointments loaded: " + store.getAppointments().size());
         System.out.println("Prescriptions loaded: " + store.getPrescriptions().size());
+        System.out.println("Referrals loaded: " + store.getReferrals().size());
+        System.out.println("Staff loaded: " + store.getStaff().size());
 
         SwingUtilities.invokeLater(() -> {
             MainFrame frame = new MainFrame(store);
