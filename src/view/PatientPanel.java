@@ -11,7 +11,9 @@ public class PatientPanel extends JPanel {
 
     private final DataStore store;
     private final DefaultTableModel tableModel;
+    private final JTable table;
 
+    private final JTextField patientIdField = new JTextField(8); // used for edit
     private final JTextField firstNameField = new JTextField(10);
     private final JTextField lastNameField = new JTextField(10);
     private final JTextField nhsField = new JTextField(12);
@@ -27,6 +29,10 @@ public class PatientPanel extends JPanel {
 
         // ---- Form panel ----
         JPanel form = new JPanel();
+
+        patientIdField.setEditable(false);
+        form.add(new JLabel("Patient ID:"));
+        form.add(patientIdField);
 
         form.add(new JLabel("First Name:"));
         form.add(firstNameField);
@@ -50,25 +56,34 @@ public class PatientPanel extends JPanel {
         form.add(gpField);
 
         JButton addBtn = new JButton("Add Patient");
+        JButton loadBtn = new JButton("Load Selected");
+        JButton updateBtn = new JButton("Update Selected");
+        JButton deleteBtn = new JButton("Delete Selected");
+
         form.add(addBtn);
+        form.add(loadBtn);
+        form.add(updateBtn);
+        form.add(deleteBtn);
 
         add(form);
 
         // ---- Table ----
         String[] cols = {"Patient ID", "First Name", "Last Name", "NHS Number"};
         tableModel = new DefaultTableModel(cols, 0);
+        table = new JTable(tableModel);
 
-        JTable table = new JTable(tableModel);
         add(new JScrollPane(table));
 
         refreshTable();
 
         addBtn.addActionListener(e -> addPatient());
+        loadBtn.addActionListener(e -> loadSelectedPatient());
+        updateBtn.addActionListener(e -> updateSelectedPatient());
+        deleteBtn.addActionListener(e -> deleteSelectedPatient());
     }
 
     private void refreshTable() {
         tableModel.setRowCount(0);
-
         for (Patient p : store.getPatients().values()) {
             tableModel.addRow(new Object[]{
                     p.getPatientId(),
@@ -96,30 +111,110 @@ public class PatientPanel extends JPanel {
             return;
         }
 
-        // Create a simple new ID: P011, P012, ...
         String newId = "P" + String.format("%03d", store.getPatients().size() + 1);
 
         Patient newPatient = new Patient(
-                newId,
-                firstName,
-                lastName,
-                nhs,
-                dob,
-                phone,
-                email,
-                gp
+                newId, firstName, lastName, nhs, dob, phone, email, gp
         );
 
-        // Add to in-memory store
         store.addPatient(newPatient);
-
-        // Append to CSV
         PatientWriter.appendPatient("data/patients.csv", newPatient);
 
-        // Refresh table
         refreshTable();
+        clearForm();
 
-        // Clear fields
+        JOptionPane.showMessageDialog(this,
+                "Patient added and saved to patients.csv",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void loadSelectedPatient() {
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Select a patient row first.",
+                    "No Selection",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String patientId = tableModel.getValueAt(row, 0).toString();
+        Patient p = store.getPatients().get(patientId);
+        if (p == null) return;
+
+        patientIdField.setText(p.getPatientId());
+        firstNameField.setText(p.getFirstName());
+        lastNameField.setText(p.getLastName());
+        nhsField.setText(p.getNhsNumber());
+        dobField.setText(p.getDateOfBirth());
+        phoneField.setText(p.getPhoneNumber());
+        emailField.setText(p.getEmail());
+        gpField.setText(p.getGpSurgeryId());
+    }
+
+    private void updateSelectedPatient() {
+        String patientId = patientIdField.getText().trim();
+        if (patientId.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Click 'Load Selected' first, then update.",
+                    "No Patient Loaded",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Patient updated = new Patient(
+                patientId,
+                firstNameField.getText().trim(),
+                lastNameField.getText().trim(),
+                nhsField.getText().trim(),
+                dobField.getText().trim(),
+                phoneField.getText().trim(),
+                emailField.getText().trim(),
+                gpField.getText().trim()
+        );
+
+        store.getPatients().put(patientId, updated);
+        refreshTable();
+        clearForm();
+
+        JOptionPane.showMessageDialog(this,
+                "Patient updated in the app (CSV not rewritten).",
+                "Updated",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void deleteSelectedPatient() {
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Select a patient row first.",
+                    "No Selection",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String patientId = tableModel.getValueAt(row, 0).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Delete patient " + patientId + " from the app?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        store.getPatients().remove(patientId);
+        refreshTable();
+        clearForm();
+
+        JOptionPane.showMessageDialog(this,
+                "Patient deleted from the app (CSV not changed).",
+                "Deleted",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void clearForm() {
+        patientIdField.setText("");
         firstNameField.setText("");
         lastNameField.setText("");
         nhsField.setText("");
@@ -127,10 +222,5 @@ public class PatientPanel extends JPanel {
         phoneField.setText("");
         emailField.setText("");
         gpField.setText("");
-
-        JOptionPane.showMessageDialog(this,
-                "Patient added and saved to patients.csv",
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 }
