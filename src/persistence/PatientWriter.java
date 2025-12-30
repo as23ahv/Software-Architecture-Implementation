@@ -31,14 +31,21 @@ public class PatientWriter {
     }
 
     private static String toCsvRow(Patient p) {
-        // Must match your FileLoader.loadPatients order (parts[0]..parts[7])
+        // patient_id,first_name,last_name,date_of_birth,nhs_number,gender,phone_number,email,
+        // address,postcode,emergency_contact_name,emergency_contact_phone,registration_date,gp_surgery_id
         return safe(p.getPatientId()) + "," +
                 safe(p.getFirstName()) + "," +
                 safe(p.getLastName()) + "," +
-                safe(p.getNhsNumber()) + "," +
                 safe(p.getDateOfBirth()) + "," +
+                safe(p.getNhsNumber()) + "," +
+                safe(p.getGender()) + "," +
                 safe(p.getPhoneNumber()) + "," +
                 safe(p.getEmail()) + "," +
+                safe(p.getAddress()) + "," +
+                safe(p.getPostcode()) + "," +
+                safe(p.getEmergencyContactName()) + "," +
+                safe(p.getEmergencyContactPhone()) + "," +
+                safe(p.getRegistrationDate()) + "," +
                 safe(p.getGpSurgeryId());
     }
 
