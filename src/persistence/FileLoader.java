@@ -25,7 +25,6 @@ public class FileLoader {
                         p[0], p[1], p[2], p[3], p[4], p[5], p[6],
                         p[7], p[8], p[9], p[10], p[11], p[12], p[13]
                 );
-
                 store.addPatient(patient);
             }
         } catch (IOException e) {
@@ -40,23 +39,10 @@ public class FileLoader {
             while ((line = reader.readLine()) != null) {
                 String[] c = line.split(",", -1);
 
-                // clinician_id,first_name,last_name,title,speciality,gmc_number,phone_number,email,
-                // workplace_id,workplace_type,employment_status,start_date
                 Clinician clinician = new Clinician(
-                        c[0],
-                        c[1],
-                        c[2],
-                        c[3],
-                        c[4],
-                        c[5],
-                        c[6],
-                        c[7],
-                        c[8],
-                        c[9],
-                        c[10],
-                        c[11]
+                        c[0], c[1], c[2], c[3], c[4], c[5],
+                        c[6], c[7], c[8], c[9], c[10], c[11]
                 );
-
                 store.addClinician(clinician);
             }
         } catch (IOException e) {
@@ -71,8 +57,22 @@ public class FileLoader {
             while ((line = reader.readLine()) != null) {
                 String[] a = line.split(",", -1);
 
+                // appointment_id,patient_id,clinician_id,facility_id,appointment_date,appointment_time,
+                // duration_minutes,appointment_type,status,reason_for_visit,notes,created_date,last_modified
                 Appointment appointment = new Appointment(
-                        a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7]
+                        a[0],
+                        a[1],
+                        a[2],
+                        a[3],
+                        a[4],
+                        a[5],
+                        a[6],
+                        a[7],
+                        a[8],
+                        a[9],
+                        a[10],
+                        a[11],
+                        a[12]
                 );
 
                 store.addAppointment(appointment);
