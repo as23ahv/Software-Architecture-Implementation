@@ -67,8 +67,12 @@ public class PatientPanel extends JPanel {
 
         add(form);
 
-        // ---- Table ----
-        String[] cols = {"Patient ID", "First Name", "Last Name", "NHS Number"};
+        // ---- Table (NOW shows all columns) ----
+        String[] cols = {
+                "Patient ID", "First Name", "Last Name",
+                "NHS Number", "DOB", "Phone", "Email", "GP ID"
+        };
+
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);
 
@@ -84,12 +88,17 @@ public class PatientPanel extends JPanel {
 
     private void refreshTable() {
         tableModel.setRowCount(0);
+
         for (Patient p : store.getPatients().values()) {
             tableModel.addRow(new Object[]{
                     p.getPatientId(),
                     p.getFirstName(),
                     p.getLastName(),
-                    p.getNhsNumber()
+                    p.getNhsNumber(),       // NHS goes here
+                    p.getDateOfBirth(),     // DOB goes here
+                    p.getPhoneNumber(),
+                    p.getEmail(),
+                    p.getGpSurgeryId()
             });
         }
     }
@@ -114,7 +123,14 @@ public class PatientPanel extends JPanel {
         String newId = "P" + String.format("%03d", store.getPatients().size() + 1);
 
         Patient newPatient = new Patient(
-                newId, firstName, lastName, nhs, dob, phone, email, gp
+                newId,
+                firstName,
+                lastName,
+                nhs,
+                dob,
+                phone,
+                email,
+                gp
         );
 
         store.addPatient(newPatient);
