@@ -11,12 +11,9 @@ public class AppointmentPanel extends JPanel {
     public AppointmentPanel(DataStore store) {
 
         String[] columns = {
-                "Appointment ID",
-                "Patient ID",
-                "Clinician ID",
-                "Date",
-                "Time",
-                "Status"
+                "Appointment ID", "Patient ID", "Clinician ID", "Facility ID",
+                "Date", "Time", "Duration(min)", "Type", "Status",
+                "Reason", "Notes", "Created", "Last Modified"
         };
 
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
@@ -26,9 +23,16 @@ public class AppointmentPanel extends JPanel {
                     a.getAppointmentId(),
                     a.getPatientId(),
                     a.getClinicianId(),
+                    a.getFacilityId(),
                     a.getAppointmentDate(),
                     a.getAppointmentTime(),
-                    a.getStatus()
+                    a.getDurationMinutes(),
+                    a.getAppointmentType(),
+                    a.getStatus(),
+                    a.getReasonForVisit(),
+                    a.getNotes(),
+                    a.getCreatedDate(),
+                    a.getLastModified()
             });
         }
 
