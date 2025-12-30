@@ -18,32 +18,16 @@ public class FileLoader {
     public static void loadPatients(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine(); // header
-
             while ((line = reader.readLine()) != null) {
                 String[] p = line.split(",", -1);
 
-                // patient_id,first_name,last_name,date_of_birth,nhs_number,gender,phone_number,email,
-                // address,postcode,emergency_contact_name,emergency_contact_phone,registration_date,gp_surgery_id
                 Patient patient = new Patient(
-                        p[0],
-                        p[1],
-                        p[2],
-                        p[3],
-                        p[4],
-                        p[5],
-                        p[6],
-                        p[7],
-                        p[8],
-                        p[9],
-                        p[10],
-                        p[11],
-                        p[12],
-                        p[13]
+                        p[0], p[1], p[2], p[3], p[4], p[5], p[6],
+                        p[7], p[8], p[9], p[10], p[11], p[12], p[13]
                 );
 
                 store.addPatient(patient);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading patients");
             e.printStackTrace();
@@ -53,17 +37,28 @@ public class FileLoader {
     public static void loadClinicians(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine(); // header
-
             while ((line = reader.readLine()) != null) {
                 String[] c = line.split(",", -1);
 
+                // clinician_id,first_name,last_name,title,speciality,gmc_number,phone_number,email,
+                // workplace_id,workplace_type,employment_status,start_date
                 Clinician clinician = new Clinician(
-                        c[0], c[1], c[2], c[3], c[4], c[5], c[6]
+                        c[0],
+                        c[1],
+                        c[2],
+                        c[3],
+                        c[4],
+                        c[5],
+                        c[6],
+                        c[7],
+                        c[8],
+                        c[9],
+                        c[10],
+                        c[11]
                 );
 
                 store.addClinician(clinician);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading clinicians");
             e.printStackTrace();
@@ -73,7 +68,6 @@ public class FileLoader {
     public static void loadAppointments(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine(); // header
-
             while ((line = reader.readLine()) != null) {
                 String[] a = line.split(",", -1);
 
@@ -83,7 +77,6 @@ public class FileLoader {
 
                 store.addAppointment(appointment);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading appointments");
             e.printStackTrace();
@@ -93,7 +86,6 @@ public class FileLoader {
     public static void loadPrescriptions(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine(); // header
-
             while ((line = reader.readLine()) != null) {
                 String[] p = line.split(",", -1);
 
@@ -106,7 +98,6 @@ public class FileLoader {
 
                 store.addPrescription(prescription);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading prescriptions");
             e.printStackTrace();
@@ -116,7 +107,6 @@ public class FileLoader {
     public static void loadReferrals(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine(); // header
-
             while ((line = reader.readLine()) != null) {
                 String[] r = line.split(",", -1);
 
@@ -129,7 +119,6 @@ public class FileLoader {
 
                 store.addReferral(referral);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading referrals");
             e.printStackTrace();
@@ -139,7 +128,6 @@ public class FileLoader {
     public static void loadStaff(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine(); // header
-
             while ((line = reader.readLine()) != null) {
                 String[] s = line.split(",", -1);
 
@@ -150,7 +138,6 @@ public class FileLoader {
 
                 store.addStaff(staff);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading staff");
             e.printStackTrace();
@@ -160,7 +147,6 @@ public class FileLoader {
     public static void loadFacilities(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine(); // header
-
             while ((line = reader.readLine()) != null) {
                 String[] f = line.split(",", -1);
 
@@ -171,7 +157,6 @@ public class FileLoader {
 
                 store.addFacility(facility);
             }
-
         } catch (IOException e) {
             System.out.println("Error loading facilities");
             e.printStackTrace();
