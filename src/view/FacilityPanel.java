@@ -9,22 +9,33 @@ import javax.swing.table.DefaultTableModel;
 public class FacilityPanel extends JPanel {
 
     public FacilityPanel(DataStore store) {
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        String[] columns = {"Facility ID", "Name", "Type", "Phone", "Capacity"};
-        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+        String[] cols = {
+                "Facility ID", "Name", "Type", "Address", "Postcode",
+                "Phone", "Email", "Opening Hours", "Manager",
+                "Capacity", "Specialities"
+        };
+
+        DefaultTableModel tableModel = new DefaultTableModel(cols, 0);
 
         for (Facility f : store.getFacilities().values()) {
             tableModel.addRow(new Object[]{
                     f.getFacilityId(),
-                    f.getName(),
-                    f.getType(),
-                    f.getPhone(),
-                    f.getCapacity()
+                    f.getFacilityName(),
+                    f.getFacilityType(),
+                    f.getAddress(),
+                    f.getPostcode(),
+                    f.getPhoneNumber(),
+                    f.getEmail(),
+                    f.getOpeningHours(),
+                    f.getManagerName(),
+                    f.getCapacity(),
+                    f.getSpecialitiesOffered()
             });
         }
 
         JTable table = new JTable(tableModel);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(new JScrollPane(table));
     }
 }
