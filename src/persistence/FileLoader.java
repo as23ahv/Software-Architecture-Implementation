@@ -111,25 +111,13 @@ public class FileLoader {
 
     public static void loadStaff(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line = reader.readLine(); // header
+            String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] s = line.split(",", -1);
 
-                // staff_id,first_name,last_name,role,department,facility_id,phone_number,email,
-                // employment_status,start_date,line_manager,access_level
                 Staff staff = new Staff(
-                        s[0],  // staff_id
-                        s[1],  // first_name
-                        s[2],  // last_name
-                        s[3],  // role
-                        s[4],  // department
-                        s[5],  // facility_id
-                        s[6],  // phone_number
-                        s[7],  // email
-                        s[8],  // employment_status
-                        s[9],  // start_date
-                        s[10], // line_manager
-                        s[11]  // access_level
+                        s[0], s[1], s[2], s[3], s[4], s[5],
+                        s[6], s[7], s[8], s[9], s[10], s[11]
                 );
 
                 store.addStaff(staff);
@@ -142,13 +130,24 @@ public class FileLoader {
 
     public static void loadFacilities(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line = reader.readLine();
+            String line = reader.readLine(); // header
             while ((line = reader.readLine()) != null) {
                 String[] f = line.split(",", -1);
 
+                // facility_id,facility_name,facility_type,address,postcode,phone_number,email,
+                // opening_hours,manager_name,capacity,specialities_offered
                 Facility facility = new Facility(
-                        f[0], f[1], f[2], f[3],
-                        f[4], f[5], f[6], f[7]
+                        f[0],  // facility_id
+                        f[1],  // facility_name
+                        f[2],  // facility_type
+                        f[3],  // address
+                        f[4],  // postcode
+                        f[5],  // phone_number
+                        f[6],  // email
+                        f[7],  // opening_hours
+                        f[8],  // manager_name
+                        f[9],  // capacity
+                        f[10]  // specialities_offered
                 );
 
                 store.addFacility(facility);
