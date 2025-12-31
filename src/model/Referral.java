@@ -1,9 +1,5 @@
 package model;
 
-/*
- * Represents a referral between primary and secondary care.
- * Data comes from referrals.csv and also new referrals created in the app.
- */
 public class Referral {
 
     private String referralId;
@@ -23,10 +19,13 @@ public class Referral {
     private String createdDate;
     private String lastUpdated;
 
-    public Referral(String referralId, String patientId, String referringClinicianId, String referredToClinicianId,
-                    String referringFacilityId, String referredToFacilityId, String referralDate, String urgencyLevel,
-                    String referralReason, String clinicalSummary, String requestedInvestigations, String status,
-                    String appointmentId, String notes, String createdDate, String lastUpdated) {
+    public Referral(String referralId, String patientId,
+                    String referringClinicianId, String referredToClinicianId,
+                    String referringFacilityId, String referredToFacilityId,
+                    String referralDate, String urgencyLevel, String referralReason,
+                    String clinicalSummary, String requestedInvestigations,
+                    String status, String appointmentId, String notes,
+                    String createdDate, String lastUpdated) {
 
         this.referralId = referralId;
         this.patientId = patientId;
@@ -63,11 +62,7 @@ public class Referral {
     public String getCreatedDate() { return createdDate; }
     public String getLastUpdated() { return lastUpdated; }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
+    // ✅ setters needed by ReferralManager
+    public void setStatus(String status) { this.status = status; }
+    public void setLastUpdated(String lastUpdated) { this.lastUpdated = lastUpdated; }
 }
