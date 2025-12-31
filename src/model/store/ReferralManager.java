@@ -11,12 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.Queue;
 
-/*
- * Singleton manager for handling referrals.
- * - Keeps one shared referral queue
- * - Generates referral "email" content (text only)
- * - Writes audit logs for EHR updates
- */
 public class ReferralManager {
 
     private static ReferralManager instance;
@@ -29,7 +23,6 @@ public class ReferralManager {
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     }
 
-    // Singleton access point
     public static ReferralManager getInstance() {
         if (instance == null) {
             instance = new ReferralManager();
@@ -50,7 +43,6 @@ public class ReferralManager {
         return referralQueue.peek();
     }
 
-    // Process one referral from the queue
     public Referral processNextReferral(DataStore store) {
         Referral referral = referralQueue.poll();
         if (referral == null) return null;
@@ -61,7 +53,7 @@ public class ReferralManager {
         referral.setStatus("PROCESSED");
         referral.setLastUpdated(now);
 
-        // Save updated referral to datastore (keeps consistent state)
+        // Save updated referral to datastore
         if (store != null) {
             store.addReferral(referral);
         }
@@ -79,14 +71,12 @@ public class ReferralManager {
         return referral;
     }
 
-    // Process all referrals currently queued
     public void processAllReferrals(DataStore store) {
         while (!referralQueue.isEmpty()) {
             processNextReferral(store);
         }
     }
 
-    // Generates referral text (acts like the email content)
     public String generateReferralEmailText(Referral r) {
         String now = LocalDateTime.now().format(formatter);
 
@@ -119,12 +109,11 @@ public class ReferralManager {
         sb.append("Status: ").append(r.getStatus()).append(System.lineSeparator());
         sb.append("Notes: ").append(r.getNotes()).append(System.lineSeparator());
         sb.append("Last Updated: ").append(r.getLastUpdated()).append(System.lineSeparator());
-
         sb.append(System.lineSeparator());
+
         return sb.toString();
     }
 
-    // Helper to append text to a file and create folder if needed
     private void appendToFile(String filePath, String content) {
         try {
             File file = new File(filePath);
