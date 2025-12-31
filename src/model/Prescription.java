@@ -1,9 +1,5 @@
 package model;
 
-/*
- * Represents a prescription issued for a patient.
- * Data is loaded from prescriptions.csv (no database).
- */
 public class Prescription {
 
     private String prescriptionId;
@@ -22,10 +18,11 @@ public class Prescription {
     private String issueDate;
     private String collectionDate;
 
-    public Prescription(String prescriptionId, String patientId, String clinicianId, String appointmentId,
-                        String prescriptionDate, String medicationName, String dosage, String frequency,
-                        String durationDays, String quantity, String instructions, String pharmacyName,
-                        String status, String issueDate, String collectionDate) {
+    public Prescription(String prescriptionId, String patientId, String clinicianId,
+                        String appointmentId, String prescriptionDate, String medicationName,
+                        String dosage, String frequency, String durationDays, String quantity,
+                        String instructions, String pharmacyName, String status,
+                        String issueDate, String collectionDate) {
 
         this.prescriptionId = prescriptionId;
         this.patientId = patientId;
