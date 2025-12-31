@@ -1,8 +1,5 @@
 package model;
 
-/*
- * Represents a non-clinical staff member (admin, receptionist, support, etc.).
- */
 public class Staff {
 
     private String staffId;
@@ -11,12 +8,17 @@ public class Staff {
     private String role;
     private String department;
     private String facilityId;
-    private String phone;
+    private String phoneNumber;
     private String email;
+    private String employmentStatus;
+    private String startDate;
+    private String lineManager;
+    private String accessLevel;
 
     public Staff(String staffId, String firstName, String lastName,
                  String role, String department, String facilityId,
-                 String phone, String email) {
+                 String phoneNumber, String email, String employmentStatus,
+                 String startDate, String lineManager, String accessLevel) {
 
         this.staffId = staffId;
         this.firstName = firstName;
@@ -24,8 +26,12 @@ public class Staff {
         this.role = role;
         this.department = department;
         this.facilityId = facilityId;
-        this.phone = phone;
+        this.phoneNumber = phoneNumber;
         this.email = email;
+        this.employmentStatus = employmentStatus;
+        this.startDate = startDate;
+        this.lineManager = lineManager;
+        this.accessLevel = accessLevel;
     }
 
     public String getStaffId() { return staffId; }
@@ -34,10 +40,10 @@ public class Staff {
     public String getRole() { return role; }
     public String getDepartment() { return department; }
     public String getFacilityId() { return facilityId; }
-    public String getPhone() { return phone; }
+    public String getPhoneNumber() { return phoneNumber; }
     public String getEmail() { return email; }
-
-    public String getFullName() {
-        return firstName + " " + lastName;
-    }
+    public String getEmploymentStatus() { return employmentStatus; }
+    public String getStartDate() { return startDate; }
+    public String getLineManager() { return lineManager; }
+    public String getAccessLevel() { return accessLevel; }
 }
