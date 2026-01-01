@@ -12,14 +12,39 @@ import model.store.DataStore;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FileLoader {
+
+    // ---- CSV helper: supports quoted fields with commas ----
+    private static String[] splitCsvLine(String line) {
+        ArrayList<String> parts = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        boolean inQuotes = false;
+
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+
+            if (ch == '"') {
+                inQuotes = !inQuotes; // toggle
+            } else if (ch == ',' && !inQuotes) {
+                parts.add(current.toString().trim().replaceAll("^\"|\"$", ""));
+                current.setLength(0);
+            } else {
+                current.append(ch);
+            }
+        }
+
+        parts.add(current.toString().trim().replaceAll("^\"|\"$", ""));
+
+        return parts.toArray(new String[0]);
+    }
 
     public static void loadPatients(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
-                String[] p = line.split(",", -1);
+                String[] p = splitCsvLine(line);
 
                 Patient patient = new Patient(
                         p[0], p[1], p[2], p[3], p[4], p[5], p[6],
@@ -37,7 +62,7 @@ public class FileLoader {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
-                String[] c = line.split(",", -1);
+                String[] c = splitCsvLine(line);
 
                 Clinician clinician = new Clinician(
                         c[0], c[1], c[2], c[3], c[4], c[5],
@@ -55,7 +80,7 @@ public class FileLoader {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
-                String[] a = line.split(",", -1);
+                String[] a = splitCsvLine(line);
 
                 Appointment appointment = new Appointment(
                         a[0], a[1], a[2], a[3], a[4], a[5],
@@ -73,7 +98,7 @@ public class FileLoader {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
-                String[] p = line.split(",", -1);
+                String[] p = splitCsvLine(line);
 
                 Prescription prescription = new Prescription(
                         p[0], p[1], p[2], p[3], p[4], p[5],
@@ -93,7 +118,7 @@ public class FileLoader {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
-                String[] r = line.split(",", -1);
+                String[] r = splitCsvLine(line);
 
                 Referral referral = new Referral(
                         r[0], r[1], r[2], r[3], r[4], r[5],
@@ -113,7 +138,7 @@ public class FileLoader {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
-                String[] s = line.split(",", -1);
+                String[] s = splitCsvLine(line);
 
                 Staff staff = new Staff(
                         s[0], s[1], s[2], s[3], s[4], s[5],
@@ -132,22 +157,22 @@ public class FileLoader {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine(); // header
             while ((line = reader.readLine()) != null) {
-                String[] f = line.split(",", -1);
+                String[] f = splitCsvLine(line);
 
                 // facility_id,facility_name,facility_type,address,postcode,phone_number,email,
                 // opening_hours,manager_name,capacity,specialities_offered
                 Facility facility = new Facility(
-                        f[0],  // facility_id
-                        f[1],  // facility_name
-                        f[2],  // facility_type
-                        f[3],  // address
-                        f[4],  // postcode
-                        f[5],  // phone_number
-                        f[6],  // email
-                        f[7],  // opening_hours
-                        f[8],  // manager_name
-                        f[9],  // capacity
-                        f[10]  // specialities_offered
+                        f[0],
+                        f[1],
+                        f[2],
+                        f[3],
+                        f[4],
+                        f[5],
+                        f[6],
+                        f[7],
+                        f[8],
+                        f[9],
+                        f[10]
                 );
 
                 store.addFacility(facility);
