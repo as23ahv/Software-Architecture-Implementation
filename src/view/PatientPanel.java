@@ -96,7 +96,7 @@ public class PatientPanel extends JPanel {
         String[] cols = {
                 "Patient ID", "First Name", "Last Name", "DOB", "NHS No", "Gender",
                 "Phone", "Email", "Address", "Postcode",
-                "Emergency Contact", "Emergency Phone", "Reg Date", "GP ID"
+                "Emergency Name", "Emergency Phone", "Reg Date", "GP ID"
         };
 
         tableModel = new DefaultTableModel(cols, 0);
@@ -170,7 +170,6 @@ public class PatientPanel extends JPanel {
 
         store.addPatient(newPatient);
 
-        // Append to CSV (we will update PatientWriter next so it writes 14 fields)
         PatientWriter.appendPatient("data/patients.csv", newPatient);
 
         refreshTable();
