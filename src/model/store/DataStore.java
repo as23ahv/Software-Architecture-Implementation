@@ -1,65 +1,37 @@
 package model.store;
 
-import model.Appointment;
-import model.Clinician;
-import model.Facility;
-import model.Patient;
-import model.Prescription;
-import model.Referral;
-import model.Staff;
+import model.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DataStore {
 
-    private Map<String, Patient> patients = new LinkedHashMap<>();
-    private Map<String, Clinician> clinicians = new LinkedHashMap<>();
-    private Map<String, Appointment> appointments = new LinkedHashMap<>();
-    private Map<String, Prescription> prescriptions = new LinkedHashMap<>();
-    private Map<String, Referral> referrals = new LinkedHashMap<>();
-    private Map<String, Staff> staff = new LinkedHashMap<>();
-    private Map<String, Facility> facilities = new LinkedHashMap<>();
+    private final Map<String, Patient> patients = new LinkedHashMap<>();
+    private final Map<String, Clinician> clinicians = new LinkedHashMap<>();
+    private final Map<String, Appointment> appointments = new LinkedHashMap<>();
+    private final Map<String, Prescription> prescriptions = new LinkedHashMap<>();
+    private final Map<String, Referral> referrals = new LinkedHashMap<>();
+    private final Map<String, Staff> staff = new LinkedHashMap<>();
+    private final Map<String, Facility> facilities = new LinkedHashMap<>();
 
-    // Patients
     public Map<String, Patient> getPatients() { return patients; }
-    public void addPatient(Patient p) {
-        if (p != null) patients.put(p.getPatientId(), p);
-    }
-
-    // Clinicians
     public Map<String, Clinician> getClinicians() { return clinicians; }
-    public void addClinician(Clinician c) {
-        if (c != null) clinicians.put(c.getClinicianId(), c);
-    }
-
-    // Appointments
     public Map<String, Appointment> getAppointments() { return appointments; }
-    public void addAppointment(Appointment a) {
-        if (a != null) appointments.put(a.getAppointmentId(), a);
-    }
-
-    // Prescriptions
     public Map<String, Prescription> getPrescriptions() { return prescriptions; }
-    public void addPrescription(Prescription p) {
-        if (p != null) prescriptions.put(p.getPrescriptionId(), p);
-    }
-
-    // Referrals
     public Map<String, Referral> getReferrals() { return referrals; }
-    public void addReferral(Referral r) {
-        if (r != null) referrals.put(r.getReferralId(), r);
-    }
-
-    // Staff
     public Map<String, Staff> getStaff() { return staff; }
-    public void addStaff(Staff s) {
-        if (s != null) staff.put(s.getStaffId(), s);
-    }
-
-    // Facilities
     public Map<String, Facility> getFacilities() { return facilities; }
-    public void addFacility(Facility f) {
-        if (f != null) facilities.put(f.getFacilityId(), f);
+
+    public void addPatient(Patient p) { patients.put(p.getPatientId(), p); }
+    public void addClinician(Clinician c) { clinicians.put(c.getClinicianId(), c); }
+    public void addAppointment(Appointment a) { appointments.put(a.getAppointmentId(), a); }
+    public void addPrescription(Prescription p) { prescriptions.put(p.getPrescriptionId(), p); }
+    public void addReferral(Referral r) { referrals.put(r.getReferralId(), r); }
+    public void addStaff(Staff s) { staff.put(s.getStaffId(), s); }
+    public void addFacility(Facility f) { facilities.put(f.getFacilityId(), f); }
+
+    public void removeClinician(String clinicianId) {
+        clinicians.remove(clinicianId);
     }
 }
