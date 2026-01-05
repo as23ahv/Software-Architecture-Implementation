@@ -74,7 +74,6 @@ public class PrescriptionPanel extends JPanel {
         form.add(new JLabel("Status:"));
         form.add(statusField);
 
-        // ✅ RENAMED LABEL
         form.add(new JLabel("Prescription Date:"));
         form.add(prescriptionDateField);
 
@@ -84,7 +83,8 @@ public class PrescriptionPanel extends JPanel {
         form.add(new JLabel("Collection Date:"));
         form.add(collectionDateField);
 
-        JButton addBtn = new JButton("Add");
+        // ✅ RENAMED BUTTON
+        JButton addBtn = new JButton("Add Prescription");
         JButton loadBtn = new JButton("Load Selected");
         JButton updateBtn = new JButton("Update Selected");
         JButton deleteBtn = new JButton("Delete Selected");
