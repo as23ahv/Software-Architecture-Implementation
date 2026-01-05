@@ -61,7 +61,7 @@ public class AppointmentPanel extends JPanel {
         form.add(new JLabel("Reason:"));
         form.add(reasonField);
 
-        JButton addBtn = new JButton("Add");
+        JButton addBtn = new JButton("Add Appointment");
         JButton loadBtn = new JButton("Load Selected");
         JButton updateBtn = new JButton("Update Selected");
         JButton deleteBtn = new JButton("Delete Selected");
