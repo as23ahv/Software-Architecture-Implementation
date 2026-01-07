@@ -5,6 +5,7 @@ import model.store.DataStore;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 
 public class StaffPanel extends JPanel {
@@ -13,115 +14,95 @@ public class StaffPanel extends JPanel {
     private final DefaultTableModel tableModel;
     private final JTable table;
 
+    // staff_id,first_name,last_name,role,department,facility_id,phone_number,email,employment_status,start_date,line_manager,access_level
     private final JTextField staffIdField = new JTextField(8);
     private final JTextField firstNameField = new JTextField(10);
     private final JTextField lastNameField = new JTextField(10);
-    private final JTextField roleField = new JTextField(12);
-    private final JTextField departmentField = new JTextField(12);
+    private final JTextField roleField = new JTextField(14);
+    private final JTextField departmentField = new JTextField(14);
     private final JTextField facilityIdField = new JTextField(8);
     private final JTextField phoneField = new JTextField(12);
     private final JTextField emailField = new JTextField(16);
     private final JTextField employmentStatusField = new JTextField(10);
     private final JTextField startDateField = new JTextField(10);
-    private final JTextField lineManagerField = new JTextField(12);
+    private final JTextField lineManagerField = new JTextField(14);
     private final JTextField accessLevelField = new JTextField(10);
 
     public StaffPanel(DataStore store) {
         this.store = store;
-        setLayout(new BorderLayout(8, 8));
+        setLayout(new BorderLayout());
 
-        // ================= FORM (TOP) =================
-        JPanel top = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(4, 6, 4, 6);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
+        // --- Top form (like prescriptions) ---
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 6));
         staffIdField.setEditable(false);
 
-        // Row 0
-        gbc.gridy = 0;
-        gbc.gridx = 0; top.add(new JLabel("Staff ID:"), gbc);
-        gbc.gridx = 1; top.add(staffIdField, gbc);
+        top.add(new JLabel("Staff ID:"));
+        top.add(staffIdField);
 
-        gbc.gridx = 2; top.add(new JLabel("First Name:"), gbc);
-        gbc.gridx = 3; top.add(firstNameField, gbc);
+        top.add(new JLabel("First Name:"));
+        top.add(firstNameField);
 
-        gbc.gridx = 4; top.add(new JLabel("Last Name:"), gbc);
-        gbc.gridx = 5; top.add(lastNameField, gbc);
+        top.add(new JLabel("Last Name:"));
+        top.add(lastNameField);
 
-        gbc.gridx = 6; top.add(new JLabel("Role:"), gbc);
-        gbc.gridx = 7; top.add(roleField, gbc);
+        top.add(new JLabel("Role:"));
+        top.add(roleField);
 
-        // Row 1
-        gbc.gridy = 1;
-        gbc.gridx = 0; top.add(new JLabel("Department:"), gbc);
-        gbc.gridx = 1; top.add(departmentField, gbc);
+        top.add(new JLabel("Department:"));
+        top.add(departmentField);
 
-        gbc.gridx = 2; top.add(new JLabel("Facility ID:"), gbc);
-        gbc.gridx = 3; top.add(facilityIdField, gbc);
+        top.add(new JLabel("Facility ID:"));
+        top.add(facilityIdField);
 
-        gbc.gridx = 4; top.add(new JLabel("Phone:"), gbc);
-        gbc.gridx = 5; top.add(phoneField, gbc);
+        top.add(new JLabel("Phone:"));
+        top.add(phoneField);
 
-        gbc.gridx = 6; top.add(new JLabel("Email:"), gbc);
-        gbc.gridx = 7; top.add(emailField, gbc);
+        top.add(new JLabel("Email:"));
+        top.add(emailField);
 
-        // Row 2
-        gbc.gridy = 2;
-        gbc.gridx = 0; top.add(new JLabel("Employment Status:"), gbc);
-        gbc.gridx = 1; top.add(employmentStatusField, gbc);
+        top.add(new JLabel("Employment Status:"));
+        top.add(employmentStatusField);
 
-        gbc.gridx = 2; top.add(new JLabel("Start Date:"), gbc);
-        gbc.gridx = 3; top.add(startDateField, gbc);
+        top.add(new JLabel("Start Date:"));
+        top.add(startDateField);
 
-        gbc.gridx = 4; top.add(new JLabel("Line Manager:"), gbc);
-        gbc.gridx = 5; top.add(lineManagerField, gbc);
+        top.add(new JLabel("Line Manager:"));
+        top.add(lineManagerField);
 
-        gbc.gridx = 6; top.add(new JLabel("Access Level:"), gbc);
-        gbc.gridx = 7; top.add(accessLevelField, gbc);
+        top.add(new JLabel("Access Level:"));
+        top.add(accessLevelField);
 
-        // Buttons Row
-        JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton addBtn = new JButton("Add Staff");
         JButton loadBtn = new JButton("Load Selected");
         JButton updateBtn = new JButton("Update Selected");
         JButton deleteBtn = new JButton("Delete Selected");
 
-        btnRow.add(addBtn);
-        btnRow.add(loadBtn);
-        btnRow.add(updateBtn);
-        btnRow.add(deleteBtn);
+        top.add(addBtn);
+        top.add(loadBtn);
+        top.add(updateBtn);
+        top.add(deleteBtn);
 
-        JPanel north = new JPanel(new BorderLayout());
-        north.add(top, BorderLayout.CENTER);
-        north.add(btnRow, BorderLayout.SOUTH);
+        add(top, BorderLayout.NORTH);
 
-        add(north, BorderLayout.NORTH);
-
-        // ================= TABLE (CENTER) =================
+        // --- Table ---
         String[] cols = {
                 "Staff ID", "First Name", "Last Name", "Role", "Department", "Facility ID",
                 "Phone", "Email", "Employment Status", "Start Date", "Line Manager", "Access Level"
         };
-
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);
 
-        table.setRowHeight(24);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        // Match the “spaced out” look like prescriptions
+        configureTable(table, new int[]{
+                90, 110, 110, 180, 150, 90,
+                120, 220, 140, 110, 180, 110
+        });
 
-        int[] widths = {80, 110, 110, 160, 140, 90, 130, 220, 140, 110, 140, 110};
-        for (int i = 0; i < widths.length; i++) {
-            table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
-        }
-
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        add(scroll, BorderLayout.CENTER);
+        add(new JScrollPane(table), BorderLayout.CENTER);
 
         refreshTable();
 
-        // Events
+        // actions
         addBtn.addActionListener(e -> addStaff());
         loadBtn.addActionListener(e -> loadSelected());
         updateBtn.addActionListener(e -> updateSelected());
@@ -154,15 +135,15 @@ public class StaffPanel extends JPanel {
                 || roleField.getText().trim().isEmpty()) {
 
             JOptionPane.showMessageDialog(this,
-                    "Please fill First Name, Last Name and Role.",
-                    "Missing Information",
+                    "Fill First Name, Last Name and Role at minimum.",
+                    "Missing Info",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String newId = "ST" + String.format("%03d", store.getStaff().size() + 1);
 
-        Staff s = new Staff(
+        Staff staff = new Staff(
                 newId,
                 firstNameField.getText().trim(),
                 lastNameField.getText().trim(),
@@ -177,9 +158,14 @@ public class StaffPanel extends JPanel {
                 accessLevelField.getText().trim()
         );
 
-        store.addStaff(s);
+        store.addStaff(staff);
         refreshTable();
         clearForm();
+
+        JOptionPane.showMessageDialog(this,
+                "Staff added.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void loadSelected() {
@@ -265,5 +251,16 @@ public class StaffPanel extends JPanel {
         startDateField.setText("");
         lineManagerField.setText("");
         accessLevelField.setText("");
+    }
+
+    private void configureTable(JTable t, int[] widths) {
+        t.setRowHeight(22);
+        t.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        t.setIntercellSpacing(new Dimension(8, 2));
+
+        for (int i = 0; i < widths.length && i < t.getColumnCount(); i++) {
+            TableColumn col = t.getColumnModel().getColumn(i);
+            col.setPreferredWidth(widths[i]);
+        }
     }
 }
