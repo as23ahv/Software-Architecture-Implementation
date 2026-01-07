@@ -5,6 +5,7 @@ import model.store.DataStore;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 
 public class FacilityPanel extends JPanel {
@@ -13,93 +14,73 @@ public class FacilityPanel extends JPanel {
     private final DefaultTableModel tableModel;
     private final JTable table;
 
+    // facility_id,facility_name,facility_type,address,postcode,phone_number,email,opening_hours,manager_name,capacity,specialities_offered
     private final JTextField facilityIdField = new JTextField(8);
-    private final JTextField nameField = new JTextField(16);
-    private final JTextField typeField = new JTextField(10);
-    private final JTextField addressField = new JTextField(18);
+    private final JTextField nameField = new JTextField(20);
+    private final JTextField typeField = new JTextField(12);
+    private final JTextField addressField = new JTextField(22);
     private final JTextField postcodeField = new JTextField(8);
     private final JTextField phoneField = new JTextField(12);
-    private final JTextField emailField = new JTextField(18);
-    private final JTextField openingHoursField = new JTextField(14);
+    private final JTextField emailField = new JTextField(20);
+    private final JTextField openingHoursField = new JTextField(18);
     private final JTextField managerField = new JTextField(14);
-    private final JTextField capacityField = new JTextField(8);
-    private final JTextField specialitiesField = new JTextField(18);
+    private final JTextField capacityField = new JTextField(6);
+    private final JTextField specialitiesField = new JTextField(22);
 
     public FacilityPanel(DataStore store) {
         this.store = store;
-        setLayout(new BorderLayout(8, 8));
+        setLayout(new BorderLayout());
 
-        // ================= FORM (TOP) =================
-        JPanel top = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(4, 6, 4, 6);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
+        // --- Top form (like prescriptions) ---
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 6));
         facilityIdField.setEditable(false);
 
-        // Row 0
-        gbc.gridy = 0;
-        gbc.gridx = 0; top.add(new JLabel("Facility ID:"), gbc);
-        gbc.gridx = 1; top.add(facilityIdField, gbc);
+        top.add(new JLabel("Facility ID:"));
+        top.add(facilityIdField);
 
-        gbc.gridx = 2; top.add(new JLabel("Name:"), gbc);
-        gbc.gridx = 3; top.add(nameField, gbc);
+        top.add(new JLabel("Name:"));
+        top.add(nameField);
 
-        gbc.gridx = 4; top.add(new JLabel("Type:"), gbc);
-        gbc.gridx = 5; top.add(typeField, gbc);
+        top.add(new JLabel("Type:"));
+        top.add(typeField);
 
-        // Row 1
-        gbc.gridy = 1;
-        gbc.gridx = 0; top.add(new JLabel("Address:"), gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; top.add(addressField, gbc);
-        gbc.gridwidth = 1;
+        top.add(new JLabel("Address:"));
+        top.add(addressField);
 
-        gbc.gridx = 3; top.add(new JLabel("Postcode:"), gbc);
-        gbc.gridx = 4; top.add(postcodeField, gbc);
+        top.add(new JLabel("Postcode:"));
+        top.add(postcodeField);
 
-        gbc.gridx = 5; top.add(new JLabel("Phone:"), gbc);
-        gbc.gridx = 6; top.add(phoneField, gbc);
+        top.add(new JLabel("Phone:"));
+        top.add(phoneField);
 
-        // Row 2
-        gbc.gridy = 2;
-        gbc.gridx = 0; top.add(new JLabel("Email:"), gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; top.add(emailField, gbc);
-        gbc.gridwidth = 1;
+        top.add(new JLabel("Email:"));
+        top.add(emailField);
 
-        gbc.gridx = 3; top.add(new JLabel("Opening Hours:"), gbc);
-        gbc.gridx = 4; top.add(openingHoursField, gbc);
+        top.add(new JLabel("Opening Hours:"));
+        top.add(openingHoursField);
 
-        gbc.gridx = 5; top.add(new JLabel("Manager:"), gbc);
-        gbc.gridx = 6; top.add(managerField, gbc);
+        top.add(new JLabel("Manager:"));
+        top.add(managerField);
 
-        // Row 3
-        gbc.gridy = 3;
-        gbc.gridx = 0; top.add(new JLabel("Capacity:"), gbc);
-        gbc.gridx = 1; top.add(capacityField, gbc);
+        top.add(new JLabel("Capacity:"));
+        top.add(capacityField);
 
-        gbc.gridx = 2; top.add(new JLabel("Specialities:"), gbc);
-        gbc.gridx = 3; gbc.gridwidth = 4; top.add(specialitiesField, gbc);
-        gbc.gridwidth = 1;
+        top.add(new JLabel("Specialities:"));
+        top.add(specialitiesField);
 
-        // Buttons
-        JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton addBtn = new JButton("Add Facility");
         JButton loadBtn = new JButton("Load Selected");
         JButton updateBtn = new JButton("Update Selected");
         JButton deleteBtn = new JButton("Delete Selected");
 
-        btnRow.add(addBtn);
-        btnRow.add(loadBtn);
-        btnRow.add(updateBtn);
-        btnRow.add(deleteBtn);
+        top.add(addBtn);
+        top.add(loadBtn);
+        top.add(updateBtn);
+        top.add(deleteBtn);
 
-        JPanel north = new JPanel(new BorderLayout());
-        north.add(top, BorderLayout.CENTER);
-        north.add(btnRow, BorderLayout.SOUTH);
+        add(top, BorderLayout.NORTH);
 
-        add(north, BorderLayout.NORTH);
-
-        // ================= TABLE (CENTER) =================
+        // --- Table ---
         String[] cols = {
                 "Facility ID", "Name", "Type", "Address", "Postcode",
                 "Phone", "Email", "Opening Hours", "Manager", "Capacity", "Specialities"
@@ -108,21 +89,15 @@ public class FacilityPanel extends JPanel {
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);
 
-        table.setRowHeight(24);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        configureTable(table, new int[]{
+                90, 260, 120, 280, 90,
+                140, 240, 220, 160, 90, 260
+        });
 
-        int[] widths = {90, 220, 100, 240, 90, 130, 220, 140, 140, 90, 220};
-        for (int i = 0; i < widths.length; i++) {
-            table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
-        }
-
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        add(scroll, BorderLayout.CENTER);
+        add(new JScrollPane(table), BorderLayout.CENTER);
 
         refreshTable();
 
-        // Events
         addBtn.addActionListener(e -> addFacility());
         loadBtn.addActionListener(e -> loadSelected());
         updateBtn.addActionListener(e -> updateSelected());
@@ -149,21 +124,18 @@ public class FacilityPanel extends JPanel {
     }
 
     private void addFacility() {
-        if (nameField.getText().trim().isEmpty()
-                || typeField.getText().trim().isEmpty()) {
-
+        if (nameField.getText().trim().isEmpty() || typeField.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Please fill Facility Name and Facility Type.",
-                    "Missing Information",
+                    "Fill Name and Type at minimum.",
+                    "Missing Info",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // auto ID: if type is GP Surgery -> S### else Hospital -> H###
-        String prefix = typeField.getText().trim().toLowerCase().contains("gp") ? "S" : "H";
-        String newId = prefix + String.format("%03d", store.getFacilities().size() + 1);
+        // Keep it simple: auto ID so the ID field stays read-only
+        String newId = "F" + String.format("%03d", store.getFacilities().size() + 1);
 
-        Facility f = new Facility(
+        Facility facility = new Facility(
                 newId,
                 nameField.getText().trim(),
                 typeField.getText().trim(),
@@ -177,9 +149,14 @@ public class FacilityPanel extends JPanel {
                 specialitiesField.getText().trim()
         );
 
-        store.addFacility(f);
+        store.addFacility(facility);
         refreshTable();
         clearForm();
+
+        JOptionPane.showMessageDialog(this,
+                "Facility added.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void loadSelected() {
@@ -262,5 +239,16 @@ public class FacilityPanel extends JPanel {
         managerField.setText("");
         capacityField.setText("");
         specialitiesField.setText("");
+    }
+
+    private void configureTable(JTable t, int[] widths) {
+        t.setRowHeight(22);
+        t.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        t.setIntercellSpacing(new Dimension(8, 2));
+
+        for (int i = 0; i < widths.length && i < t.getColumnCount(); i++) {
+            TableColumn col = t.getColumnModel().getColumn(i);
+            col.setPreferredWidth(widths[i]);
+        }
     }
 }
