@@ -14,25 +14,27 @@ public class ReferralPanel extends JPanel {
     private final DefaultTableModel tableModel;
     private final JTable table;
 
-    private final JTextField patientIdField = new JTextField(6);
-    private final JTextField refClinicianIdField = new JTextField(6);
-    private final JTextField toClinicianIdField = new JTextField(6);
-    private final JTextField refFacilityIdField = new JTextField(6);
-    private final JTextField toFacilityIdField = new JTextField(6);
+    // ---- Form fields ----
+    private final JTextField patientIdField = new JTextField(8);
+    private final JTextField refClinicianIdField = new JTextField(8);
+    private final JTextField toClinicianIdField = new JTextField(8);
+    private final JTextField refFacilityIdField = new JTextField(8);
+    private final JTextField toFacilityIdField = new JTextField(8);
     private final JTextField referralDateField = new JTextField(10);
     private final JTextField urgencyField = new JTextField(10);
-    private final JTextField reasonField = new JTextField(14);
+    private final JTextField reasonField = new JTextField(16);
     private final JTextField appointmentIdField = new JTextField(8);
     private final JTextField statusField = new JTextField(10);
-    private final JTextField notesField = new JTextField(14);
-    private final JTextField clinicalSummaryField = new JTextField(20);
-    private final JTextField investigationsField = new JTextField(20);
+    private final JTextField notesField = new JTextField(16);
+
+    private final JTextField clinicalSummaryField = new JTextField(30);
+    private final JTextField investigationsField = new JTextField(30);
 
     public ReferralPanel(DataStore store) {
         this.store = store;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // ---- FORM (single clean panel) ----
+        // ================= FORM =================
         JPanel form = new JPanel();
 
         form.add(new JLabel("Patient ID:"));
@@ -59,42 +61,58 @@ public class ReferralPanel extends JPanel {
         form.add(new JLabel("Reason:"));
         form.add(reasonField);
 
-        form.add(new JLabel("Clinical Summary:"));
-        form.add(clinicalSummaryField);
-
-        form.add(new JLabel("Investigations:"));
-        form.add(investigationsField);
-
-        form.add(new JLabel("Appointment ID:"));
-        form.add(appointmentIdField);
-
-        form.add(new JLabel("Status:"));
-        form.add(statusField);
-
-        form.add(new JLabel("Notes:"));
-        form.add(notesField);
-
-        JButton addBtn = new JButton("Add Referral");
-        form.add(addBtn);
-
         add(form);
 
-        // ---- TABLE ----
+        JPanel form2 = new JPanel();
+        form2.add(new JLabel("Clinical Summary:"));
+        form2.add(clinicalSummaryField);
+        form2.add(new JLabel("Investigations:"));
+        form2.add(investigationsField);
+        add(form2);
+
+        JPanel form3 = new JPanel();
+        form3.add(new JLabel("Appointment ID:"));
+        form3.add(appointmentIdField);
+        form3.add(new JLabel("Status:"));
+        form3.add(statusField);
+        form3.add(new JLabel("Notes:"));
+        form3.add(notesField);
+
+        JButton addBtn = new JButton("Add Referral");
+        form3.add(addBtn);
+
+        add(form3);
+
+        // ================= TABLE =================
         String[] cols = {
                 "Referral ID", "Patient ID", "Ref Clinician", "To Clinician",
-                "Ref Facility", "To Facility", "Referral Date",
-                "Urgency", "Reason", "Clinical Summary", "Investigations",
+                "Ref Facility", "To Facility", "Referral Date", "Urgency",
+                "Reason", "Clinical Summary", "Investigations",
                 "Status", "Appointment ID", "Notes",
                 "Created", "Last Updated"
         };
 
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);
+
+        // ---- spacing fixes ----
+        table.setRowHeight(26);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.setPreferredSize(new java.awt.Dimension(1200, 300));
-        add(scroll);
+        int[] widths = {
+                80, 80, 90, 90, 90, 90,
+                110, 90, 200, 220, 220,
+                100, 110, 220, 110, 110
+        };
+
+        for (int i = 0; i < widths.length; i++) {
+            table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        add(scrollPane);
 
         refreshTable();
 
@@ -133,18 +151,18 @@ public class ReferralPanel extends JPanel {
                 || reasonField.getText().trim().isEmpty()) {
 
             JOptionPane.showMessageDialog(this,
-                    "Fill Patient ID, Clinicians, Urgency and Reason.",
+                    "Fill Patient ID, Clinician IDs, Urgency and Reason.",
                     "Missing Info",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        String id = "R" + String.format("%03d", store.getReferrals().size() + 1);
+        String newId = "R" + String.format("%03d", store.getReferrals().size() + 1);
         String today = LocalDate.now().toString();
         String now = LocalDateTime.now().toString();
 
         Referral referral = new Referral(
-                id,
+                newId,
                 patientIdField.getText().trim(),
                 refClinicianIdField.getText().trim(),
                 toClinicianIdField.getText().trim(),
@@ -181,10 +199,10 @@ public class ReferralPanel extends JPanel {
         referralDateField.setText("");
         urgencyField.setText("");
         reasonField.setText("");
-        clinicalSummaryField.setText("");
-        investigationsField.setText("");
         appointmentIdField.setText("");
         statusField.setText("");
         notesField.setText("");
+        clinicalSummaryField.setText("");
+        investigationsField.setText("");
     }
 }
