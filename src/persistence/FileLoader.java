@@ -1,12 +1,6 @@
 package persistence;
 
-import model.Appointment;
-import model.Clinician;
-import model.Facility;
-import model.Patient;
-import model.Prescription;
-import model.Referral;
-import model.Staff;
+import model.*;
 import model.store.DataStore;
 
 import java.io.BufferedReader;
@@ -26,7 +20,7 @@ public class FileLoader {
             char ch = line.charAt(i);
 
             if (ch == '"') {
-                inQuotes = !inQuotes; // toggle
+                inQuotes = !inQuotes;
             } else if (ch == ',' && !inQuotes) {
                 parts.add(current.toString().trim().replaceAll("^\"|\"$", ""));
                 current.setLength(0);
@@ -36,7 +30,6 @@ public class FileLoader {
         }
 
         parts.add(current.toString().trim().replaceAll("^\"|\"$", ""));
-
         return parts.toArray(new String[0]);
     }
 
@@ -60,14 +53,41 @@ public class FileLoader {
 
     public static void loadClinicians(String filePath, DataStore store) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line = reader.readLine();
+            String line = reader.readLine(); // header
             while ((line = reader.readLine()) != null) {
                 String[] c = splitCsvLine(line);
 
-                Clinician clinician = new Clinician(
-                        c[0], c[1], c[2], c[3], c[4], c[5],
-                        c[6], c[7], c[8], c[9], c[10], c[11]
-                );
+                // Expected columns:
+                // clinician_id,first_name,last_name,title,speciality,gmc_number,phone_number,email,
+                // workplace_id,workplace_type,employment_status,start_date
+
+                String clinicianId = c[0];
+                String firstName = c[1];
+                String lastName = c[2];
+                String title = c[3];
+                String speciality = c[4];
+                String gmcNumber = c[5];
+                String phone = c[6];
+                String email = c[7];
+                String workplaceId = c[8];
+                String workplaceType = c[9];
+                String employmentStatus = c[10];
+                String startDate = c[11];
+
+                String lowerTitle = title == null ? "" : title.toLowerCase();
+
+                Clinician clinician;
+                if (lowerTitle.contains("nurse")) {
+                    clinician = new Nurse(clinicianId, firstName, lastName, title, speciality, gmcNumber,
+                            phone, email, workplaceId, workplaceType, employmentStatus, startDate);
+                } else if (lowerTitle.contains("gp") || lowerTitle.contains("general")) {
+                    clinician = new GeneralPractitioner(clinicianId, firstName, lastName, title, speciality, gmcNumber,
+                            phone, email, workplaceId, workplaceType, employmentStatus, startDate);
+                } else {
+                    clinician = new SpecialistDoctor(clinicianId, firstName, lastName, title, speciality, gmcNumber,
+                            phone, email, workplaceId, workplaceType, employmentStatus, startDate);
+                }
+
                 store.addClinician(clinician);
             }
         } catch (IOException e) {
@@ -159,20 +179,9 @@ public class FileLoader {
             while ((line = reader.readLine()) != null) {
                 String[] f = splitCsvLine(line);
 
-                // facility_id,facility_name,facility_type,address,postcode,phone_number,email,
-                // opening_hours,manager_name,capacity,specialities_offered
                 Facility facility = new Facility(
-                        f[0],
-                        f[1],
-                        f[2],
-                        f[3],
-                        f[4],
-                        f[5],
-                        f[6],
-                        f[7],
-                        f[8],
-                        f[9],
-                        f[10]
+                        f[0], f[1], f[2], f[3], f[4],
+                        f[5], f[6], f[7], f[8], f[9], f[10]
                 );
 
                 store.addFacility(facility);
