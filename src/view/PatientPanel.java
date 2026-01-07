@@ -1,6 +1,7 @@
 package view;
 
 import model.Patient;
+import model.Prescription;
 import model.store.DataStore;
 import persistence.PatientWriter;
 
@@ -84,11 +85,13 @@ public class PatientPanel extends JPanel {
         JButton loadBtn = new JButton("Load Selected");
         JButton updateBtn = new JButton("Update Selected");
         JButton deleteBtn = new JButton("Delete Selected");
+        JButton viewPrescriptionsBtn = new JButton("View Prescriptions"); // ✅ NEW
 
         form.add(addBtn);
         form.add(loadBtn);
         form.add(updateBtn);
         form.add(deleteBtn);
+        form.add(viewPrescriptionsBtn); // ✅ NEW
 
         add(form);
 
@@ -109,6 +112,7 @@ public class PatientPanel extends JPanel {
         loadBtn.addActionListener(e -> loadSelectedPatient());
         updateBtn.addActionListener(e -> updateSelectedPatient());
         deleteBtn.addActionListener(e -> deleteSelectedPatient());
+        viewPrescriptionsBtn.addActionListener(e -> viewPrescriptionsForSelectedPatient()); // ✅ NEW
     }
 
     private void refreshTable() {
@@ -169,7 +173,6 @@ public class PatientPanel extends JPanel {
         );
 
         store.addPatient(newPatient);
-
         PatientWriter.appendPatient("data/patients.csv", newPatient);
 
         refreshTable();
@@ -275,6 +278,57 @@ public class PatientPanel extends JPanel {
                 "Patient deleted from the app (CSV not changed).",
                 "Deleted",
                 JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // ✅ NEW: View prescriptions for selected patient
+    private void viewPrescriptionsForSelectedPatient() {
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Select a patient row first, then click View Prescriptions.",
+                    "No Patient Selected",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String patientId = tableModel.getValueAt(row, 0).toString();
+
+        DefaultTableModel rxModel = new DefaultTableModel(new String[]{
+                "Prescription ID", "Patient ID", "Clinician ID", "Appointment ID",
+                "Prescription Date", "Medication", "Dosage", "Frequency",
+                "Duration Days", "Quantity", "Instructions", "Pharmacy",
+                "Status", "Issue Date", "Collection Date"
+        }, 0);
+
+        int count = 0;
+        for (Prescription p : store.getPrescriptions().values()) {
+            if (patientId.equalsIgnoreCase(p.getPatientId())) {
+                rxModel.addRow(new Object[]{
+                        p.getPrescriptionId(),
+                        p.getPatientId(),
+                        p.getClinicianId(),
+                        p.getAppointmentId(),
+                        p.getPrescriptionDate(),
+                        p.getMedicationName(),
+                        p.getDosage(),
+                        p.getFrequency(),
+                        p.getDurationDays(),
+                        p.getQuantity(),
+                        p.getInstructions(),
+                        p.getPharmacyName(),
+                        p.getStatus(),
+                        p.getIssueDate(),
+                        p.getCollectionDate()
+                });
+                count++;
+            }
+        }
+
+        JTable rxTable = new JTable(rxModel);
+        JScrollPane scroll = new JScrollPane(rxTable);
+
+        String title = "Prescriptions for " + patientId + " (" + count + ")";
+        JOptionPane.showMessageDialog(this, scroll, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void clearForm() {
