@@ -5,7 +5,6 @@ import model.store.DataStore;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -15,121 +14,90 @@ public class ReferralPanel extends JPanel {
     private final DefaultTableModel tableModel;
     private final JTable table;
 
-    // ---- Form fields ----
-    private final JTextField patientIdField = new JTextField(8);
-    private final JTextField refClinicianIdField = new JTextField(8);
-    private final JTextField toClinicianIdField = new JTextField(8);
-    private final JTextField refFacilityIdField = new JTextField(8);
-    private final JTextField toFacilityIdField = new JTextField(8);
+    private final JTextField patientIdField = new JTextField(6);
+    private final JTextField refClinicianIdField = new JTextField(6);
+    private final JTextField toClinicianIdField = new JTextField(6);
+    private final JTextField refFacilityIdField = new JTextField(6);
+    private final JTextField toFacilityIdField = new JTextField(6);
     private final JTextField referralDateField = new JTextField(10);
     private final JTextField urgencyField = new JTextField(10);
-    private final JTextField reasonField = new JTextField(16);
-
-    private final JTextField clinicalSummaryField = new JTextField(22);
-    private final JTextField investigationsField = new JTextField(22);
-
+    private final JTextField reasonField = new JTextField(14);
     private final JTextField appointmentIdField = new JTextField(8);
     private final JTextField statusField = new JTextField(10);
-    private final JTextField notesField = new JTextField(18);
+    private final JTextField notesField = new JTextField(14);
+    private final JTextField clinicalSummaryField = new JTextField(20);
+    private final JTextField investigationsField = new JTextField(20);
 
     public ReferralPanel(DataStore store) {
         this.store = store;
-        setLayout(new BorderLayout(8, 8));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // ================= FORM (TOP) =================
-        JPanel topPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(4, 6, 4, 6);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridy = 0;
+        // ---- FORM (single clean panel) ----
+        JPanel form = new JPanel();
 
-        // Row 1
-        gbc.gridx = 0; topPanel.add(new JLabel("Patient ID:"), gbc);
-        gbc.gridx = 1; topPanel.add(patientIdField, gbc);
+        form.add(new JLabel("Patient ID:"));
+        form.add(patientIdField);
 
-        gbc.gridx = 2; topPanel.add(new JLabel("Ref Clinician ID:"), gbc);
-        gbc.gridx = 3; topPanel.add(refClinicianIdField, gbc);
+        form.add(new JLabel("Ref Clinician ID:"));
+        form.add(refClinicianIdField);
 
-        gbc.gridx = 4; topPanel.add(new JLabel("To Clinician ID:"), gbc);
-        gbc.gridx = 5; topPanel.add(toClinicianIdField, gbc);
+        form.add(new JLabel("To Clinician ID:"));
+        form.add(toClinicianIdField);
 
-        gbc.gridx = 6; topPanel.add(new JLabel("Ref Facility ID:"), gbc);
-        gbc.gridx = 7; topPanel.add(refFacilityIdField, gbc);
+        form.add(new JLabel("Ref Facility ID:"));
+        form.add(refFacilityIdField);
 
-        gbc.gridx = 8; topPanel.add(new JLabel("To Facility ID:"), gbc);
-        gbc.gridx = 9; topPanel.add(toFacilityIdField, gbc);
+        form.add(new JLabel("To Facility ID:"));
+        form.add(toFacilityIdField);
 
-        // Row 2
-        gbc.gridy = 1;
+        form.add(new JLabel("Referral Date:"));
+        form.add(referralDateField);
 
-        gbc.gridx = 0; topPanel.add(new JLabel("Referral Date:"), gbc);
-        gbc.gridx = 1; topPanel.add(referralDateField, gbc);
+        form.add(new JLabel("Urgency:"));
+        form.add(urgencyField);
 
-        gbc.gridx = 2; topPanel.add(new JLabel("Urgency:"), gbc);
-        gbc.gridx = 3; topPanel.add(urgencyField, gbc);
+        form.add(new JLabel("Reason:"));
+        form.add(reasonField);
 
-        gbc.gridx = 4; topPanel.add(new JLabel("Reason:"), gbc);
-        gbc.gridx = 5; gbc.gridwidth = 2; topPanel.add(reasonField, gbc);
-        gbc.gridwidth = 1;
+        form.add(new JLabel("Clinical Summary:"));
+        form.add(clinicalSummaryField);
 
-        gbc.gridx = 7; topPanel.add(new JLabel("Clinical Summary:"), gbc);
-        gbc.gridx = 8; topPanel.add(clinicalSummaryField, gbc);
+        form.add(new JLabel("Investigations:"));
+        form.add(investigationsField);
 
-        gbc.gridx = 9; topPanel.add(new JLabel("Investigations:"), gbc);
+        form.add(new JLabel("Appointment ID:"));
+        form.add(appointmentIdField);
 
-        // Row 3
-        gbc.gridy = 2;
+        form.add(new JLabel("Status:"));
+        form.add(statusField);
 
-        gbc.gridx = 0; topPanel.add(new JLabel("Investigations:"), gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; topPanel.add(investigationsField, gbc);
-        gbc.gridwidth = 1;
-
-        gbc.gridx = 3; topPanel.add(new JLabel("Appointment ID:"), gbc);
-        gbc.gridx = 4; topPanel.add(appointmentIdField, gbc);
-
-        gbc.gridx = 5; topPanel.add(new JLabel("Status:"), gbc);
-        gbc.gridx = 6; topPanel.add(statusField, gbc);
-
-        gbc.gridx = 7; topPanel.add(new JLabel("Notes:"), gbc);
-        gbc.gridx = 8; topPanel.add(notesField, gbc);
+        form.add(new JLabel("Notes:"));
+        form.add(notesField);
 
         JButton addBtn = new JButton("Add Referral");
-        gbc.gridx = 9; topPanel.add(addBtn, gbc);
+        form.add(addBtn);
 
-        add(topPanel, BorderLayout.NORTH);
+        add(form);
 
-        // ================= TABLE (CENTER) =================
+        // ---- TABLE ----
         String[] cols = {
                 "Referral ID", "Patient ID", "Ref Clinician", "To Clinician",
-                "Ref Facility", "To Facility", "Referral Date", "Urgency",
-                "Reason", "Clinical Summary", "Investigations",
+                "Ref Facility", "To Facility", "Referral Date",
+                "Urgency", "Reason", "Clinical Summary", "Investigations",
                 "Status", "Appointment ID", "Notes",
                 "Created", "Last Updated"
         };
 
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);
-
-        // Make table readable like other tabs
-        table.setRowHeight(24);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        int[] widths = {
-                80, 80, 90, 90, 90, 90,
-                110, 90, 200, 220, 220,
-                100, 110, 220, 120, 120
-        };
-        for (int i = 0; i < widths.length; i++) {
-            table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        add(scrollPane, BorderLayout.CENTER);
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setPreferredSize(new java.awt.Dimension(1200, 300));
+        add(scroll);
 
         refreshTable();
 
-        // Only Add Referral (as required)
         addBtn.addActionListener(e -> addReferral());
     }
 
@@ -165,18 +133,18 @@ public class ReferralPanel extends JPanel {
                 || reasonField.getText().trim().isEmpty()) {
 
             JOptionPane.showMessageDialog(this,
-                    "Fill Patient ID, Clinician IDs, Urgency and Reason.",
+                    "Fill Patient ID, Clinicians, Urgency and Reason.",
                     "Missing Info",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        String newId = "R" + String.format("%03d", store.getReferrals().size() + 1);
+        String id = "R" + String.format("%03d", store.getReferrals().size() + 1);
         String today = LocalDate.now().toString();
         String now = LocalDateTime.now().toString();
 
         Referral referral = new Referral(
-                newId,
+                id,
                 patientIdField.getText().trim(),
                 refClinicianIdField.getText().trim(),
                 toClinicianIdField.getText().trim(),
@@ -199,7 +167,7 @@ public class ReferralPanel extends JPanel {
         clearForm();
 
         JOptionPane.showMessageDialog(this,
-                "Referral added successfully.",
+                "Referral created successfully.",
                 "Success",
                 JOptionPane.INFORMATION_MESSAGE);
     }
