@@ -1,6 +1,6 @@
 package view;
 
-import model.Clinician;
+import model.*;
 import model.store.DataStore;
 
 import javax.swing.*;
@@ -25,6 +25,9 @@ public class ClinicianPanel extends JPanel {
     private final JTextField employmentStatusField = new JTextField(10);
     private final JTextField startDateField = new JTextField(10);
 
+    private final JComboBox<String> clinicianTypeBox =
+            new JComboBox<>(new String[]{"GeneralPractitioner", "Nurse", "SpecialistDoctor"});
+
     public ClinicianPanel(DataStore store) {
         this.store = store;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -35,6 +38,9 @@ public class ClinicianPanel extends JPanel {
 
         form.add(new JLabel("Clinician ID:"));
         form.add(clinicianIdField);
+
+        form.add(new JLabel("Type:"));
+        form.add(clinicianTypeBox);
 
         form.add(new JLabel("First Name:"));
         form.add(firstNameField);
@@ -82,7 +88,7 @@ public class ClinicianPanel extends JPanel {
         add(form);
 
         String[] cols = {
-                "Clinician ID", "First Name", "Last Name", "Title", "Speciality",
+                "Clinician ID", "Type", "First Name", "Last Name", "Title", "Speciality",
                 "GMC Number", "Phone", "Email",
                 "Workplace ID", "Workplace Type", "Employment Status", "Start Date"
         };
@@ -101,9 +107,11 @@ public class ClinicianPanel extends JPanel {
 
     private void refreshTable() {
         tableModel.setRowCount(0);
+
         for (Clinician c : store.getClinicians().values()) {
             tableModel.addRow(new Object[]{
                     c.getClinicianId(),
+                    c.getClass().getSimpleName(),
                     c.getFirstName(),
                     c.getLastName(),
                     c.getTitle(),
@@ -117,6 +125,59 @@ public class ClinicianPanel extends JPanel {
                     c.getStartDate()
             });
         }
+    }
+
+    private Clinician buildClinician(String id) {
+        String type = (String) clinicianTypeBox.getSelectedItem();
+
+        if ("Nurse".equals(type)) {
+            return new Nurse(
+                    id,
+                    firstNameField.getText().trim(),
+                    lastNameField.getText().trim(),
+                    titleField.getText().trim(),
+                    specialityField.getText().trim(),
+                    gmcNumberField.getText().trim(),
+                    phoneField.getText().trim(),
+                    emailField.getText().trim(),
+                    workplaceIdField.getText().trim(),
+                    workplaceTypeField.getText().trim(),
+                    employmentStatusField.getText().trim(),
+                    startDateField.getText().trim()
+            );
+        }
+
+        if ("GeneralPractitioner".equals(type)) {
+            return new GeneralPractitioner(
+                    id,
+                    firstNameField.getText().trim(),
+                    lastNameField.getText().trim(),
+                    titleField.getText().trim(),
+                    specialityField.getText().trim(),
+                    gmcNumberField.getText().trim(),
+                    phoneField.getText().trim(),
+                    emailField.getText().trim(),
+                    workplaceIdField.getText().trim(),
+                    workplaceTypeField.getText().trim(),
+                    employmentStatusField.getText().trim(),
+                    startDateField.getText().trim()
+            );
+        }
+
+        return new SpecialistDoctor(
+                id,
+                firstNameField.getText().trim(),
+                lastNameField.getText().trim(),
+                titleField.getText().trim(),
+                specialityField.getText().trim(),
+                gmcNumberField.getText().trim(),
+                phoneField.getText().trim(),
+                emailField.getText().trim(),
+                workplaceIdField.getText().trim(),
+                workplaceTypeField.getText().trim(),
+                employmentStatusField.getText().trim(),
+                startDateField.getText().trim()
+        );
     }
 
     private void addClinician() {
@@ -133,21 +194,7 @@ public class ClinicianPanel extends JPanel {
 
         String newId = "C" + String.format("%03d", store.getClinicians().size() + 1);
 
-        Clinician clinician = new Clinician(
-                newId,
-                firstNameField.getText().trim(),
-                lastNameField.getText().trim(),
-                titleField.getText().trim(),
-                specialityField.getText().trim(),
-                gmcNumberField.getText().trim(),
-                phoneField.getText().trim(),
-                emailField.getText().trim(),
-                workplaceIdField.getText().trim(),
-                workplaceTypeField.getText().trim(),
-                employmentStatusField.getText().trim(),
-                startDateField.getText().trim()
-        );
-
+        Clinician clinician = buildClinician(newId);
         store.addClinician(clinician);
 
         refreshTable();
@@ -168,6 +215,7 @@ public class ClinicianPanel extends JPanel {
         if (c == null) return;
 
         clinicianIdField.setText(c.getClinicianId());
+        clinicianTypeBox.setSelectedItem(c.getClass().getSimpleName());
         firstNameField.setText(c.getFirstName());
         lastNameField.setText(c.getLastName());
         titleField.setText(c.getTitle());
@@ -191,22 +239,9 @@ public class ClinicianPanel extends JPanel {
             return;
         }
 
-        Clinician updated = new Clinician(
-                id,
-                firstNameField.getText().trim(),
-                lastNameField.getText().trim(),
-                titleField.getText().trim(),
-                specialityField.getText().trim(),
-                gmcNumberField.getText().trim(),
-                phoneField.getText().trim(),
-                emailField.getText().trim(),
-                workplaceIdField.getText().trim(),
-                workplaceTypeField.getText().trim(),
-                employmentStatusField.getText().trim(),
-                startDateField.getText().trim()
-        );
-
+        Clinician updated = buildClinician(id);
         store.getClinicians().put(id, updated);
+
         refreshTable();
         clearForm();
     }
@@ -242,5 +277,6 @@ public class ClinicianPanel extends JPanel {
         workplaceTypeField.setText("");
         employmentStatusField.setText("");
         startDateField.setText("");
+        clinicianTypeBox.setSelectedIndex(0);
     }
 }
