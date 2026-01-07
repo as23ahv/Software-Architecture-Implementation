@@ -7,6 +7,7 @@ import persistence.PatientWriter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public class PatientPanel extends JPanel {
 
@@ -85,13 +86,13 @@ public class PatientPanel extends JPanel {
         JButton loadBtn = new JButton("Load Selected");
         JButton updateBtn = new JButton("Update Selected");
         JButton deleteBtn = new JButton("Delete Selected");
-        JButton viewPrescriptionsBtn = new JButton("View Prescriptions"); // ✅ NEW
+        JButton viewPrescriptionsBtn = new JButton("View Prescriptions");
 
         form.add(addBtn);
         form.add(loadBtn);
         form.add(updateBtn);
         form.add(deleteBtn);
-        form.add(viewPrescriptionsBtn); // ✅ NEW
+        form.add(viewPrescriptionsBtn);
 
         add(form);
 
@@ -112,7 +113,7 @@ public class PatientPanel extends JPanel {
         loadBtn.addActionListener(e -> loadSelectedPatient());
         updateBtn.addActionListener(e -> updateSelectedPatient());
         deleteBtn.addActionListener(e -> deleteSelectedPatient());
-        viewPrescriptionsBtn.addActionListener(e -> viewPrescriptionsForSelectedPatient()); // ✅ NEW
+        viewPrescriptionsBtn.addActionListener(e -> viewPrescriptionsForSelectedPatient());
     }
 
     private void refreshTable() {
@@ -152,7 +153,6 @@ public class PatientPanel extends JPanel {
             return;
         }
 
-        // auto ID
         String newId = "P" + String.format("%03d", store.getPatients().size() + 1);
 
         Patient newPatient = new Patient(
@@ -244,11 +244,6 @@ public class PatientPanel extends JPanel {
         store.getPatients().put(patientId, updated);
         refreshTable();
         clearForm();
-
-        JOptionPane.showMessageDialog(this,
-                "Patient updated in the app (CSV not rewritten).",
-                "Updated",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void deleteSelectedPatient() {
@@ -262,25 +257,12 @@ public class PatientPanel extends JPanel {
         }
 
         String patientId = tableModel.getValueAt(row, 0).toString();
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Delete patient " + patientId + " from the app?",
-                "Confirm Delete",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirm != JOptionPane.YES_OPTION) return;
-
         store.getPatients().remove(patientId);
         refreshTable();
         clearForm();
-
-        JOptionPane.showMessageDialog(this,
-                "Patient deleted from the app (CSV not changed).",
-                "Deleted",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // ✅ NEW: View prescriptions for selected patient
+    // ✅ BIG resizable window instead of tiny JOptionPane
     private void viewPrescriptionsForSelectedPatient() {
         int row = table.getSelectedRow();
         if (row == -1) {
@@ -325,10 +307,26 @@ public class PatientPanel extends JPanel {
         }
 
         JTable rxTable = new JTable(rxModel);
-        JScrollPane scroll = new JScrollPane(rxTable);
+        rxTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // ✅ allows horizontal scroll
 
-        String title = "Prescriptions for " + patientId + " (" + count + ")";
-        JOptionPane.showMessageDialog(this, scroll, title, JOptionPane.INFORMATION_MESSAGE);
+        JScrollPane scroll = new JScrollPane(rxTable);
+        scroll.setPreferredSize(new Dimension(1100, 450)); // ✅ makes it big
+
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Prescriptions for " + patientId + " (" + count + ")", Dialog.ModalityType.MODELESS);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dialog.getContentPane().setLayout(new BorderLayout());
+        dialog.getContentPane().add(scroll, BorderLayout.CENTER);
+
+        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton closeBtn = new JButton("Close");
+        closeBtn.addActionListener(e -> dialog.dispose());
+        bottom.add(closeBtn);
+        dialog.getContentPane().add(bottom, BorderLayout.SOUTH);
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setResizable(true); // ✅ user can resize
+        dialog.setVisible(true);
     }
 
     private void clearForm() {
