@@ -2,14 +2,14 @@ package model;
 
 public abstract class Clinician extends Person {
 
-    private String clinicianId;
-    private String title;
-    private String speciality;
-    private String gmcNumber;
-    private String workplaceId;
-    private String workplaceType;
-    private String employmentStatus;
-    private String startDate;
+    private final String clinicianId;
+    private final String title;
+    private final String speciality;
+    private final String gmcNumber;
+    private final String workplaceId;
+    private final String workplaceType;
+    private final String employmentStatus;
+    private final String startDate;
 
     public Clinician(String clinicianId,
                      String firstName,
@@ -24,7 +24,7 @@ public abstract class Clinician extends Person {
                      String employmentStatus,
                      String startDate) {
 
-        super(clinicianId, firstName, lastName, phoneNumber, "", email);
+        super(clinicianId, firstName, lastName, phoneNumber, email);
         this.clinicianId = clinicianId;
         this.title = title;
         this.speciality = speciality;
@@ -67,7 +67,6 @@ public abstract class Clinician extends Person {
         return startDate;
     }
 
-    // Convenience for table display
     public String getFullName() {
         return getFirstName() + " " + getLastName();
     }
